@@ -41,7 +41,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: dev@clubapp.pl
+      PGADMIN_DEFAULT_EMAIL: dev1@clubapp.pl
       PGADMIN_DEFAULT_PASSWORD: secret
       PGADMIN_LISTEN_PORT: 80
     ports:

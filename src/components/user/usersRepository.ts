@@ -3,7 +3,7 @@
 import { User } from './userModel';
 
 //temporary variable
-const users = [{id:4, name: 'John2'}, {id:2, name: 'John2'}, {id:4, name: 'John2'}];
+const users = [{id:6, name: 'John3'}, {id:2, name: 'John2'}, {id:4, name: 'John2'}];
 
 export const findAllUsers = async (): Promise<User[]> => {
   return new Promise((resolve, reject) => {
