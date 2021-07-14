@@ -12,7 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findAllUsers = void 0;
 //temporary variable
-const users = [{ id: 1, name: 'John' }];
+const users = [{ id: 6, name: 'John3' }, { id: 2, name: 'John2' }, { id: 4, name: 'John2' }];
 const findAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         resolve(users);

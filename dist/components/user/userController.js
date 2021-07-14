@@ -11,13 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUsers = void 0;
-const usersService_1 = require("./usersService");
+const typeorm_1 = require("typeorm");
+const User_1 = require("../../entities/User");
 const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allUsers = yield usersService_1.getAll();
+        // const allUsers = await getAll();
+        const usersRepository = typeorm_1.getRepository(User_1.User);
+        let newUser = new User_1.User();
+        newUser = Object.assign(Object.assign({}, newUser), { firstName: 'Francis', lastName: 'Monday', email: 'francis.monday@gmail.com', password: 'somepass' });
+        yield usersRepository.save(newUser);
         res.status(200);
         res.json({
-            results: allUsers
+            results: newUser
         });
     }
     catch (err) {

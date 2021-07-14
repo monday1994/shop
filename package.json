@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "husky": "^6.0.0"
+    "husky": "^6.0.0",
+    "pg": "^8.6.0",
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
