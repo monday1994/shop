@@ -4,9 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "clean": "rm -rf /dist",
     "build": "tsc",
     "start": "tsc & node .",
-    "dev": "tsc -w & nodemon .",
+    "dev": "clean & tsc -w & nodemon .",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "prettier": "prettier 'src/**/*.ts'",

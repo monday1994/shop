@@ -1,10 +1,14 @@
 // component routing layer
 
 import { Router } from 'express';
-import { getAllUsers } from './userController';
+import UserController from './userController';
+import UsersService from './usersService';
+import UsersRepository from './usersRepository';
 
 const router = Router();
 
-router.get('', getAllUsers);
+const userController = new UserController(new UsersService(new UsersRepository()));
+
+router.get('', userController.getAll);
 
 export default router;

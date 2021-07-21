@@ -1,12 +1,32 @@
 // user database access layer
 
-import { User } from './userModel';
+import { getRepository } from 'typeorm';
+import { User } from '../../entities/User';
 
-//temporary variable
-const users = [{id:6, name: 'John3'}, {id:2, name: 'John2'}, {id:4, name: 'John2'}];
+export default class UsersRepository {
+  async findAll(): Promise<User[]> {
+    return getRepository(User).find();
+  }
 
-export const findAllUsers = async (): Promise<User[]> => {
-  return new Promise((resolve, reject) => {
-    resolve(users);
-  });
+  async findById(id: string): Promise<User> {
+    return getRepository(User).findOne(id);
+  }
+}
+/*
+q
+export const create = async (newUser: User): Promise<User> => {
+  const usersRepository = getRepository(User);
+  let userEntity = new User();
+  newUser = {
+    ...newUser,
+    firstName: 'Francis',
+    lastName: 'Monday',
+    email: 'francis.monday@gmail.com',
+    password: 'somepass',
+  }
+
+  await usersRepository.save(newUser)
+
+  return userEntity;
 };
+*/

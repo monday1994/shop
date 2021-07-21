@@ -9,7 +9,6 @@ const healthCheckHandler = (req: Request, res: Response) => {
 export const mountRoutes = (app: Express, prefix: string): Express => {
     //health check
     app.get(`${prefix}/`, healthCheckHandler);
-
     //other routes
     app.use(`${prefix}/users`, userRouter);
 
