@@ -6,16 +6,17 @@ export const initDbConnection = async () => {
   try {
     const connection = await createConnection({
       type: 'postgres',
-      host: 'localhost',
+      host: config.dbHost,
       port: config.postgrePort,
-      username: 'postgres',
-      password: 'secret',
-      database: 'shop-db',
+      username: config.dbUsername,
+      password: config.dbPassword,
+      database: config.dbName,
       entities: [User, Product],
     });
 
     return connection.synchronize();
   } catch (err) {
     console.log('err while connecting with db = ', err);
+    return err;
   }
 };

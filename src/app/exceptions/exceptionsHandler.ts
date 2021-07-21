@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-
+//todo read https://www.toptal.com/nodejs/node-js-error-handling
 export interface ErrorMessage {
     message: string,
     status: number

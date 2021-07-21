@@ -1,5 +1,9 @@
 export default {
   port: 5000,
-  postgrePort: 5432,
   host: 'localhost',
+  postgrePort: 5432,
+  dbName: 'shop-db',
+  dbUsername: 'postgres',
+  dbPassword: 'secret',
+  dbHost: 'localhost',
 };
