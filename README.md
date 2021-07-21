@@ -1,5 +1,10 @@
 # club-finder-api
 
+## TODO
+1. validation
+2. error handling
+3. logger
+
 ## Docker-compose
 
 Repozytorium zostało rozszezone o kontenery dokera. Cały konfig znajduje się w plikach `docker-compose.yaml` oraz `Dockerfile`.
