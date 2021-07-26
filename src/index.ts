@@ -1,3 +1,4 @@
+import "express-async-errors";
 import http from 'http';
 import config from './config/default';
 import app from './app/app';

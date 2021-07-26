@@ -1,16 +1,23 @@
 import {NextFunction, Request, Response} from 'express';
+import {HttpStatusCode} from './error';
+
 //todo read https://www.toptal.com/nodejs/node-js-error-handling
+
 export interface ErrorMessage {
     message: string,
-    status: number
+    httpCode: number
 }
 
+// next callback have to be here, otherwise handler won't properly return response
 export const genericExceptionHandler = (err: ErrorMessage, req: Request, res: Response, next: NextFunction) : void => {
-    if(err?.message && err?.status) {
-        const {status, message} = err;
-        res.status(status);
-        res.json({status, message});
+    if(err?.message && err?.httpCode) {
+        const {httpCode, message} = err;
+        res.status(httpCode);
+        res.json({status: httpCode, message});
+    } else {
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR);
+        res.json({
+            message: 'Internal Server Error'
+        })
     }
-
-    next(err);
 };
