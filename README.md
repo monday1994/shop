@@ -1,9 +1,11 @@
 # club-finder-api
 
 ## TODO
-1. validation
-2. error handling
 3. logger
+
+## DONE
+error handling
+user - validation
 
 ## Docker-compose
 

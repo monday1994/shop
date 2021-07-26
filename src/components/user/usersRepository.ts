@@ -1,8 +1,9 @@
 // user database access layer
 
-import {DeleteResult, getRepository} from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from '../../entities/User';
-import {UserInterface} from './userModel';
+import { UserInterface } from './userModel';
+import { ConflictError } from '../../app/exceptions/error';
 
 export default class UsersRepository {
   async findAll(): Promise<User[]> {
@@ -15,36 +16,52 @@ export default class UsersRepository {
 
   async create(user: UserInterface): Promise<User> {
     const usersRepository = getRepository(User);
-    const {firstName, lastName, email, password} = user;
+    const { firstName, lastName, email, password } = user;
 
     const newUser = new User();
-    newUser.firstName = firstName;
-    newUser.lastName = lastName;
-    newUser.email = email;
+    newUser.firstName = firstName.toLowerCase();
+    newUser.lastName = lastName.toLowerCase();
+    newUser.email = email.toLowerCase();
 
     //todo add crypto hash salt
     newUser.password = password;
 
-    await usersRepository.save(newUser)
+    try {
+      await usersRepository.save(newUser);
 
-    return newUser;
+      return newUser;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictError(`User with email: ${email} already exists`);
+      } else {
+        throw err;
+      }
+    }
   }
 
   async update(user: UserInterface): Promise<User> {
     const usersRepository = getRepository(User);
 
-    const {id, firstName, lastName, email} = user;
+    const { id, firstName, lastName, email } = user;
 
     const userToUpdate = new User();
 
     userToUpdate.id = id;
-    userToUpdate.firstName = firstName;
-    userToUpdate.lastName = lastName;
-    userToUpdate.email = email;
+    userToUpdate.firstName = firstName.toLowerCase();
+    userToUpdate.lastName = lastName.toLowerCase();
+    userToUpdate.email = email.toLowerCase();
 
-    await usersRepository.update({id}, userToUpdate);
+    try {
+      await usersRepository.update({ id }, userToUpdate);
 
-    return userToUpdate;
+      return userToUpdate;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictError(`User with email: ${email} already exists`);
+      } else {
+        throw err;
+      }
+    }
   }
 
   async removeById(id: string): Promise<number> {

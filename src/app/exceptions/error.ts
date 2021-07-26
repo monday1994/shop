@@ -3,6 +3,7 @@ export const enum HttpStatusCode {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
+  CONFLICT = 409,
   INTERNAL_SERVER_ERROR = 500,
 }
 
@@ -52,6 +53,12 @@ export class ForbiddenError extends APIError {
 export class BadRequestError extends APIError {
   constructor(description: string) {
     super('BAD_REQUEST', HttpStatusCode.BAD_REQUEST, description);
+  }
+}
+
+export class ConflictError extends APIError {
+  constructor(description: string) {
+    super('CONFLICT', HttpStatusCode.CONFLICT, description);
   }
 }
 
