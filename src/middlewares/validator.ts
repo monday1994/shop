@@ -7,9 +7,15 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
     return next();
   }
   const extractedErrors: any[] = [];
-  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
+  errors.array().map((err) => {
+    //todo make sure to return only one message per field
+    extractedErrors.push({ [err.param]: err.msg })
+    /*if(err.msg !== 'Invalid value') {
+      extractedErrors.push({ [err.param]: err.msg })
+    }*/
+  });
 
   return res.status(400).json({
-    errors: extractedErrors,
+    errors: extractedErrors
   });
 };
