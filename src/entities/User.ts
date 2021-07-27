@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, Generated, Unique} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Generated } from 'typeorm';
+import moment from 'moment';
 
 @Entity()
 export class User {
@@ -6,15 +7,21 @@ export class User {
   @Generated('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 255})
   firstName: string;
 
-  @Column()
+  @Column({ length: 255 })
   lastName: string;
 
-  @Column({ unique: true})
+  @Column({ unique: true, length: 255 })
   email: string;
 
-  @Column()
-  password: string
+  @Column({ length: 255 })
+  password: string;
+
+  @Column({ type: 'timestamptz' })
+  createdAt: string;
+
+  @Column({ type: 'timestamptz' })
+  updatedAt: string;
 }

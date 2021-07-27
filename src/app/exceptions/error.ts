@@ -1,3 +1,4 @@
+
 export const enum HttpStatusCode {
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
@@ -59,6 +60,13 @@ export class BadRequestError extends APIError {
 export class ConflictError extends APIError {
   constructor(description: string) {
     super('CONFLICT', HttpStatusCode.CONFLICT, description);
+  }
+}
+
+//general db error
+export class GeneralPostgresError extends APIError {
+  constructor(description: string) {
+    super('INTERNAL', HttpStatusCode.INTERNAL_SERVER_ERROR, description);
   }
 }
 

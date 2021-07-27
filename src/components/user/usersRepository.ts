@@ -3,7 +3,9 @@
 import { getRepository } from 'typeorm';
 import { User } from '../../entities/User';
 import { UserInterface } from './userModel';
-import { ConflictError } from '../../app/exceptions/error';
+import { ConflictError, GeneralPostgresError } from '../../app/exceptions/error';
+import { getTimestamp } from '../../utils/utils';
+import usersRouter from './usersRouter';
 
 export default class UsersRepository {
   async findAll(): Promise<User[]> {
@@ -26,6 +28,9 @@ export default class UsersRepository {
     //todo add crypto hash salt
     newUser.password = password;
 
+    newUser.createdAt = getTimestamp();
+    newUser.updatedAt = getTimestamp();
+
     try {
       await usersRepository.save(newUser);
 
@@ -33,13 +38,15 @@ export default class UsersRepository {
     } catch (err) {
       if (err.code === '23505') {
         throw new ConflictError(`User with email: ${email} already exists`);
+      } else if (err.code) {
+        throw new GeneralPostgresError(`Db error with code: ${err.code}`);
       } else {
         throw err;
       }
     }
   }
 
-  async update(user: UserInterface): Promise<User> {
+  async update(user: UserInterface): Promise<User | number> {
     const usersRepository = getRepository(User);
 
     const { id, firstName, lastName, email } = user;
@@ -50,14 +57,21 @@ export default class UsersRepository {
     userToUpdate.firstName = firstName.toLowerCase();
     userToUpdate.lastName = lastName.toLowerCase();
     userToUpdate.email = email.toLowerCase();
+    userToUpdate.updatedAt = getTimestamp();
 
     try {
-      await usersRepository.update({ id }, userToUpdate);
+      const {affected} = await usersRepository.update({ id }, userToUpdate);
 
-      return userToUpdate;
+      if (affected > 0) {
+        return userToUpdate;
+      }
+
+      return affected;
     } catch (err) {
       if (err.code === '23505') {
         throw new ConflictError(`User with email: ${email} already exists`);
+      } else if (err.code) {
+        throw new GeneralPostgresError(`Db error with code: ${err.code}`);
       } else {
         throw err;
       }

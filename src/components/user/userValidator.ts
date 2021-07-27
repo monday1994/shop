@@ -2,13 +2,13 @@ import { body, param } from 'express-validator';
 
 const firstNameRule = body('firstName')
   .exists()
-  .isAlpha()
+  .isString()
   .isLength({ min: 2 })
   .withMessage('must be at least 2 chars long and contain only letters');
 
 const lastNameRule = body('lastName')
   .exists()
-  .isAlpha()
+  .isString()
   .isLength({ min: 2 })
   .withMessage('must be at least 2 chars long and contain only letters');
 
@@ -23,6 +23,11 @@ const passwordRule = body('password')
   .isLength({ min: 5 })
   .withMessage('must be at least 5 chars long');
 
+const idRule = param('id')
+  .exists()
+  .isUUID(4)
+  .withMessage('id have to be uuid 4th version');
+
 export const createUserValidationRules = () => [
   // firstName must be an email
   firstNameRule,
@@ -32,15 +37,11 @@ export const createUserValidationRules = () => [
 ];
 
 export const updateUserValidationRules = () => [
+  idRule,
   firstNameRule,
   lastNameRule,
   emailRule,
 ]
-
-const idRule = param('id')
-    .exists()
-    .isUUID(4)
-    .withMessage('id have to be uuid 4th version');
 
 export const getByIdValidationRule = () => [
   idRule

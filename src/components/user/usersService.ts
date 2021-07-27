@@ -20,8 +20,14 @@ export default class UsersService {
     return this.usersRepository.create(user);
   }
 
-  async updateUser(user: UserInterface): Promise<User> {
-    return this.usersRepository.update(user);
+  async updateUser(user: UserInterface): Promise<User | number> {
+    const result = await this.usersRepository.update(user);
+
+    if(typeof result !== 'number') {
+      return result;
+    }
+
+    throw new NotFoundError(`User with id: ${user.id} does not exist in db`);
   }
 
   async deleteById(id: string): Promise<number> {

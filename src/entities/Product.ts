@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, Generated} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Generated } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -6,12 +6,18 @@ export class Product {
   @Generated('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 255 })
   name: string;
 
-  @Column()
+  @Column({ length: 2000 })
   description: string;
 
-  @Column()
+  @Column({ type: 'real' })
   price: string;
+
+  @Column({ type: 'timestamptz' })
+  createdAt: string;
+
+  @Column({ type: 'timestamptz' })
+  updatedAt: string;
 }

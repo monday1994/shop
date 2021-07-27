@@ -14,7 +14,7 @@ const usersController = new UsersController(new UsersService(new UsersRepository
 router.get('', usersController.getAll);
 router.get('/:id', getByIdValidationRule(), validate, usersController.getById);
 router.post('', createUserValidationRules(), validate, usersController.create);
-router.put('/:id', getByIdValidationRule(), updateUserValidationRules(), validate, usersController.update);
+router.put('/:id', updateUserValidationRules(), validate, usersController.update);
 router.delete('/:id', getByIdValidationRule(), validate, usersController.delete);
 
 export default router;

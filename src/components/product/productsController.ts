@@ -1,18 +1,18 @@
 // component controller layer
 
 import { Response, Request, NextFunction } from 'express';
-import UsersService from './usersService';
+import ProductsService from './productsService';
 
-export default class UsersController {
-  constructor(private usersService: UsersService) {}
+export default class ProductsController {
+  constructor(private productsService: ProductsService) {}
 
   getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const users = await this.usersService.getAllUsers();
+    const products = await this.productsService.getAllProducts();
 
     res.status(200);
     res.json({
       data: {
-        results: users,
+        results: products,
       },
     });
   };
@@ -20,48 +20,50 @@ export default class UsersController {
   getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
 
-    const user = await this.usersService.getUserById(id);
+    const product = await this.productsService.getProductById(id);
+
+
     res.status(200);
-    res.json({ data: user });
+    res.json({ data: product });
   };
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { firstName, lastName, email, password } = req.body;
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password,
+    const { name, description, price } = req.body;
+    const newProduct = {
+      name,
+      description,
+      price
     };
 
-    const createdUser = await this.usersService.createUser(newUser);
+    const createdProduct = await this.productsService.createProduct(newProduct);
     res.status(201);
     res.json({
-      data: createdUser,
+      data: createdProduct,
     });
   };
 
   update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const { firstName, lastName, email } = req.body;
-    const user = {
+    const { name, description, price } = req.body;
+
+    const product = {
       id,
-      firstName,
-      lastName,
-      email,
+      name,
+      description,
+      price
     };
 
-    const updatedUser = await this.usersService.updateUser(user);
+    const updatedProduct = await this.productsService.updateProduct(product);
     res.status(200);
     res.json({
-      data: updatedUser,
+      data: updatedProduct,
     });
   };
 
   delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
 
-    await this.usersService.deleteById(id);
+    await this.productsService.deleteById(id);
 
     res.status(204);
     res.send();
