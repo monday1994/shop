@@ -22,7 +22,6 @@ export default class ProductsController {
 
     const product = await this.productsService.getProductById(id);
 
-
     res.status(200);
     res.json({ data: product });
   };
@@ -32,7 +31,7 @@ export default class ProductsController {
     const newProduct = {
       name,
       description,
-      price
+      price,
     };
 
     const createdProduct = await this.productsService.createProduct(newProduct);
@@ -50,7 +49,7 @@ export default class ProductsController {
       id,
       name,
       description,
-      price
+      price,
     };
 
     const updatedProduct = await this.productsService.updateProduct(product);

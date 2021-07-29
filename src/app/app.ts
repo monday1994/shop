@@ -6,13 +6,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-let app = express();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //all routes mount
-app = mountRoutes(app, '/api/v1');
+mountRoutes(app, '/api/v1');
 
 app.init = async () => {
   // connect to db and set up other things once server gets up
@@ -20,5 +20,14 @@ app.init = async () => {
 };
 
 app.use(genericExceptionHandler);
+
+process.on('unhandledRejection', (err: Error) => {
+  console.error('unhendled rejection error: ', err);
+  throw err;
+});
+
+process.on('uncaughtException', (err: Error) => {
+  console.error('uncaught exception, error: ', err);
+});
 
 export default app;

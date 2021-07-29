@@ -1,11 +1,17 @@
-# club-finder-api
+# shop-api
 
 ## TODO
-3. logger
+logger for requests
+Add order entity,
+   add order crud
+   add order validation
+   add relations in db
+   migrations config
 
 ## DONE
 error handling
 user - validation
+logger
 
 ## Docker-compose
 
