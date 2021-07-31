@@ -28,9 +28,9 @@ export default class UsersController {
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { firstName, lastName, email, password } = req.body;
     const newUser = {
-      firstName,
-      lastName,
-      email,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      email: email.toLowerCase(),
       password,
     };
 
@@ -46,9 +46,9 @@ export default class UsersController {
     const { firstName, lastName, email } = req.body;
     const user = {
       id,
-      firstName,
-      lastName,
-      email,
+      firstName: firstName.toLowerCase(),
+      lastName: lastName.toLowerCase(),
+      email: email.toLowerCase(),
     };
 
     const updatedUser = await this.usersService.updateUser(user);

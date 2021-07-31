@@ -1,9 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, Generated } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Order } from './Order';
+import { Category } from './Category';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
+  //@Generated('uuid')
   id: string;
 
   @Column({ length: 255 })
@@ -14,6 +16,12 @@ export class Product {
 
   @Column({ type: 'real' })
   price: string;
+
+  @ManyToOne(() => Order, (order) => order.products)
+  order: Order;
+
+  @ManyToOne(() => Category, (category) => category.products, { nullable: false })
+  category: Category;
 
   @Column({ type: 'timestamptz' })
   createdAt: string;

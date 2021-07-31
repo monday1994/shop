@@ -29,8 +29,8 @@ export default class ProductsController {
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { name, description, price } = req.body;
     const newProduct = {
-      name,
-      description,
+      name: name.toLowerCase(),
+      description: description.toLowerCase(),
       price,
     };
 
@@ -47,8 +47,8 @@ export default class ProductsController {
 
     const product = {
       id,
-      name,
-      description,
+      name: name.toLowerCase(),
+      description: description.toLowerCase(),
       price,
     };
 

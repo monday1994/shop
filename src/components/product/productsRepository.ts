@@ -18,9 +18,9 @@ export default class ProductsRepository {
     const { name, description, price } = product;
 
     const newProduct = new Product();
-    newProduct.name = name.toLowerCase();
-    newProduct.description = description.toLowerCase();
-    newProduct.price = price.toLowerCase();
+    newProduct.name = name;
+    newProduct.description = description;
+    newProduct.price = price;
     newProduct.createdAt = getTimestamp();
     newProduct.updatedAt = getTimestamp();
 
@@ -44,10 +44,9 @@ export default class ProductsRepository {
 
     const productToUpdate = new Product();
 
-    productToUpdate.id = id;
-    productToUpdate.name = name.toLowerCase();
-    productToUpdate.description = description.toLowerCase();
-    productToUpdate.price = price.toLowerCase();
+    productToUpdate.name = name;
+    productToUpdate.description = description;
+    productToUpdate.price = price;
     productToUpdate.updatedAt = getTimestamp();
 
     try {

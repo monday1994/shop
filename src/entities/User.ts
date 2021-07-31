@@ -1,10 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, Generated } from 'typeorm';
-import moment from 'moment';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
+import {Order} from './Order';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ length: 255})
@@ -18,6 +17,9 @@ export class User {
 
   @Column({ length: 255 })
   password: string;
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 
   @Column({ type: 'timestamptz' })
   createdAt: string;

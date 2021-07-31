@@ -5,7 +5,6 @@ import { User } from '../../entities/User';
 import { UserInterface } from './userModel';
 import { ConflictError, GeneralPostgresError } from '../../app/exceptions/error';
 import { getTimestamp } from '../../utils/utils';
-import usersRouter from './usersRouter';
 
 export default class UsersRepository {
   async findAll(): Promise<User[]> {
@@ -21,9 +20,9 @@ export default class UsersRepository {
     const { firstName, lastName, email, password } = user;
 
     const newUser = new User();
-    newUser.firstName = firstName.toLowerCase();
-    newUser.lastName = lastName.toLowerCase();
-    newUser.email = email.toLowerCase();
+    newUser.firstName = firstName;
+    newUser.lastName = lastName;
+    newUser.email = email;
 
     //todo add crypto hash salt
     newUser.password = password;
@@ -54,9 +53,9 @@ export default class UsersRepository {
     const userToUpdate = new User();
 
     userToUpdate.id = id;
-    userToUpdate.firstName = firstName.toLowerCase();
-    userToUpdate.lastName = lastName.toLowerCase();
-    userToUpdate.email = email.toLowerCase();
+    userToUpdate.firstName = firstName;
+    userToUpdate.lastName = lastName;
+    userToUpdate.email = email;
     userToUpdate.updatedAt = getTimestamp();
 
     try {
@@ -69,6 +68,7 @@ export default class UsersRepository {
       return affected;
     } catch (err) {
       if (err.code === '23505') {
+        //todo https://www.npmjs.com/package/postgres-error-codes
         throw new ConflictError(`User with email: ${email} already exists`);
       } else if (err.code) {
         throw new GeneralPostgresError(`Db error with code: ${err.code}`);
