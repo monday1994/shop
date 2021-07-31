@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany} from 'typeorm';
 import { Order } from './Order';
-import { Category } from './Category';
+import {Category} from './Category';
 
 @Entity()
 export class Product {
@@ -17,11 +17,15 @@ export class Product {
   @Column({ type: 'real' })
   price: string;
 
-  @ManyToOne(() => Order, (order) => order.products)
-  order: Order;
+  @ManyToMany(() => Order, (order) => order.products)
+  orders: Order;
 
   @ManyToOne(() => Category, (category) => category.products, { nullable: false })
   category: Category;
+
+  // used for fighting with problem in saving category via id
+  @Column()
+  category_id: string
 
   @Column({ type: 'timestamptz' })
   createdAt: string;

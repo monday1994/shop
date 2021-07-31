@@ -1,6 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne} from 'typeorm';
-import {Product} from './Product';
-import {User} from './User';
+import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToOne, ManyToMany } from 'typeorm';
+import { Product } from './Product';
+import { User } from './User';
 
 @Entity()
 export class Order {
@@ -8,7 +8,7 @@ export class Order {
   id: string;
 
   @Column({ length: 255 })
-  title: string;
+  name: string;
 
   @Column({ type: 'real' })
   price: string;
@@ -16,11 +16,17 @@ export class Order {
   @Column({ length: 255 })
   address: string;
 
-  @OneToMany(() => Product, product => product.order)
+  @ManyToMany(() => Product, (product) => product.orders, { nullable: false })
+  @JoinTable({ name: 'order_product' })
   products: Product[];
 
-  @ManyToOne(() => User, user => user.orders)
+  //todo probably to solve string id add use https://stackoverflow.com/questions/53426715/typeorm-saving-an-entity-with-many-to-many-relationship-ids
+
+  @ManyToOne(() => User, (user) => user.orders, { nullable: false })
   user: User;
+
+  @Column()
+  user_id: string;
 
   @Column({ type: 'timestamptz' })
   createdAt: string;

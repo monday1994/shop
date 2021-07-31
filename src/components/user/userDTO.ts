@@ -1,6 +1,6 @@
 // user model
 
-export interface UserInterface {
+export interface UserDTO {
   id?: string;
   firstName: string;
   lastName: string;

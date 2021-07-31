@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import {Category} from '../../entities/Category';
-import { CategoryInterface } from './categoryModel';
+import { CategoryDTO } from './categoryDTO';
 import { GeneralPostgresError } from '../../app/exceptions/error';
 import { getTimestamp } from '../../utils/utils';
 
@@ -13,7 +13,7 @@ export default class CategoriesRepository {
     return getRepository(Category).findOne(id);
   }
 
-  async create(category: CategoryInterface): Promise<Category> {
+  async create(category: CategoryDTO): Promise<Category> {
     const repository = getRepository(Category);
     const { name } = category;
 
@@ -35,7 +35,7 @@ export default class CategoriesRepository {
     }
   }
 
-  async update(category: CategoryInterface): Promise<Category | number> {
+  async update(category: CategoryDTO): Promise<Category | number> {
     const productsRepository = getRepository(Category);
 
     const { id, name } = category;

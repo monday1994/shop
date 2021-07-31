@@ -3,8 +3,8 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { logger } from '../middlewares/logger';
 import { User } from '../entities/User';
 import { Product } from '../entities/Product';
-import {Category} from '../entities/Category';
-import {Order} from '../entities/Order';
+import { Category } from '../entities/Category';
+import { Order } from '../entities/Order';
 
 type DB_TYPE = 'postgres';
 

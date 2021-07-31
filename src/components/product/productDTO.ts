@@ -1,8 +1,9 @@
 // user model
 
-export interface ProductInterface {
+export interface ProductDTO {
   id?: string;
   name: string;
   description: string;
   price: string;
+  categoryId: string;
 }

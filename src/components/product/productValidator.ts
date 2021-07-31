@@ -18,6 +18,11 @@ const priceRule = body('price')
   .withMessage('must be at least 0 and up to 10000000')
   .isLength({ min: 1 });
 
+const categoryIdRule = body('categoryId')
+  .exists()
+  .isUUID(4)
+  .withMessage('categoryId have to be uuid 4th version');
+
 const idRule = param('id')
   .exists()
   .isUUID(4)
@@ -27,14 +32,16 @@ export const createProductValidationRules = () => [
   // firstName must be an email
   nameRule,
   descriptionRule,
-  priceRule
+  priceRule,
+  categoryIdRule
 ];
 
 export const updateProductValidationRules = () => [
   idRule,
   nameRule,
   descriptionRule,
-  priceRule
+  priceRule,
+  categoryIdRule
 ]
 
 export const getByIdValidationRule = () => [

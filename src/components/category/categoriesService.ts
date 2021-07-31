@@ -1,5 +1,5 @@
 import CategoriesRepository from './categoriesRepository';
-import {CategoryInterface} from './categoryModel';
+import {CategoryDTO} from './categoryDTO';
 import {NotFoundError} from '../../app/exceptions/error';
 import {Category} from '../../entities/Category';
 
@@ -10,11 +10,11 @@ export default class CategoriesService {
     return this.categoriesRepository.findAll();
   }
 
-  async createCategory(category: CategoryInterface): Promise<Category> {
+  async createCategory(category: CategoryDTO): Promise<Category> {
     return this.categoriesRepository.create(category);
   }
 
-  async updateCategory(category: CategoryInterface): Promise<Category | number> {
+  async updateCategory(category: CategoryDTO): Promise<Category | number> {
     const result = await this.categoriesRepository.update(category);
 
     if(typeof result !== 'number') {

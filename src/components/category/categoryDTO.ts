@@ -1,6 +1,6 @@
 // user model
 
-export interface CategoryInterface {
+export interface CategoryDTO {
   id?: string;
   name: string;
 }

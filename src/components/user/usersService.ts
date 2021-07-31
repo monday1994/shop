@@ -2,7 +2,7 @@
 
 import {User} from '../../entities/User';
 import UsersRepository from './usersRepository';
-import {UserInterface} from './userModel';
+import {UserDTO} from './userDTO';
 import {NotFoundError} from '../../app/exceptions/error';
 
 export default class UsersService {
@@ -16,11 +16,11 @@ export default class UsersService {
     return this.usersRepository.findById(id);
   }
 
-  async createUser(user: UserInterface): Promise<User> {
+  async createUser(user: UserDTO): Promise<User> {
     return this.usersRepository.create(user);
   }
 
-  async updateUser(user: UserInterface): Promise<User | number> {
+  async updateUser(user: UserDTO): Promise<User | number> {
     const result = await this.usersRepository.update(user);
 
     if(typeof result !== 'number') {

@@ -2,7 +2,7 @@
 
 import { getRepository } from 'typeorm';
 import { User } from '../../entities/User';
-import { UserInterface } from './userModel';
+import { UserDTO } from './userDTO';
 import { ConflictError, GeneralPostgresError } from '../../app/exceptions/error';
 import { getTimestamp } from '../../utils/utils';
 
@@ -15,7 +15,7 @@ export default class UsersRepository {
     return getRepository(User).findOne(id);
   }
 
-  async create(user: UserInterface): Promise<User> {
+  async create(user: UserDTO): Promise<User> {
     const usersRepository = getRepository(User);
     const { firstName, lastName, email, password } = user;
 
@@ -45,7 +45,7 @@ export default class UsersRepository {
     }
   }
 
-  async update(user: UserInterface): Promise<User | number> {
+  async update(user: UserDTO): Promise<User | number> {
     const usersRepository = getRepository(User);
 
     const { id, firstName, lastName, email } = user;

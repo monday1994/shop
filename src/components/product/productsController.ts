@@ -27,11 +27,12 @@ export default class ProductsController {
   };
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { name, description, price } = req.body;
+    const { name, description, price, categoryId } = req.body;
     const newProduct = {
       name: name.toLowerCase(),
       description: description.toLowerCase(),
       price,
+      categoryId
     };
 
     const createdProduct = await this.productsService.createProduct(newProduct);
@@ -43,13 +44,14 @@ export default class ProductsController {
 
   update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const { name, description, price } = req.body;
+    const { name, description, price, categoryId } = req.body;
 
     const product = {
       id,
       name: name.toLowerCase(),
       description: description.toLowerCase(),
       price,
+      categoryId
     };
 
     const updatedProduct = await this.productsService.updateProduct(product);

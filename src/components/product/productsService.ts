@@ -1,5 +1,5 @@
 import ProductsRepository from './productsRepository';
-import {ProductInterface} from './productModel';
+import {ProductDTO} from './productDTO';
 import {NotFoundError} from '../../app/exceptions/error';
 import {Product} from '../../entities/Product';
 
@@ -14,11 +14,11 @@ export default class ProductsService {
     return this.productsRepository.findById(id);
   }
 
-  async createProduct(product: ProductInterface): Promise<Product> {
+  async createProduct(product: ProductDTO): Promise<Product> {
     return this.productsRepository.create(product);
   }
 
-  async updateProduct(product: ProductInterface): Promise<Product | number> {
+  async updateProduct(product: ProductDTO): Promise<Product | number> {
     const result = await this.productsRepository.update(product);
 
     if(typeof result !== 'number') {
