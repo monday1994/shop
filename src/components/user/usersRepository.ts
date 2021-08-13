@@ -3,15 +3,14 @@
 import { getRepository } from 'typeorm';
 import { User } from '../../entities/User';
 import { UserDTO } from './userDTO';
-import { ConflictError, GeneralPostgresError } from '../../app/exceptions/error';
-import { getTimestamp } from '../../utils/utils';
+import {ConflictError, GeneralPostgresError, NotFoundError} from '../../app/exceptions/error';
 
 export default class UsersRepository {
-  async findAll(): Promise<User[]> {
+  findAll(): Promise<User[]> {
     return getRepository(User).find();
   }
 
-  async findById(id: string): Promise<User> {
+  findById(id: string): Promise<User> {
     return getRepository(User).findOne(id);
   }
 
@@ -23,22 +22,16 @@ export default class UsersRepository {
     newUser.firstName = firstName;
     newUser.lastName = lastName;
     newUser.email = email;
-
-    //todo add crypto hash salt
     newUser.password = password;
 
-    newUser.createdAt = getTimestamp();
-    newUser.updatedAt = getTimestamp();
-
     try {
-      await usersRepository.save(newUser);
-
-      return newUser;
+      const createdUser = await usersRepository.save(newUser);
+      return createdUser;
     } catch (err) {
       if (err.code === '23505') {
         throw new ConflictError(`User with email: ${email} already exists`);
       } else if (err.code) {
-        throw new GeneralPostgresError(`Db error with code: ${err.code}`);
+        throw new GeneralPostgresError(err);
       } else {
         throw err;
       }
@@ -56,7 +49,6 @@ export default class UsersRepository {
     userToUpdate.firstName = firstName;
     userToUpdate.lastName = lastName;
     userToUpdate.email = email;
-    userToUpdate.updatedAt = getTimestamp();
 
     try {
       const {affected} = await usersRepository.update({ id }, userToUpdate);
@@ -65,21 +57,22 @@ export default class UsersRepository {
         return userToUpdate;
       }
 
-      return affected;
+      throw new NotFoundError(`User with id: ${user.id} does not exist in db`);
     } catch (err) {
-      if (err.code === '23505') {
-        //todo https://www.npmjs.com/package/postgres-error-codes
-        throw new ConflictError(`User with email: ${email} already exists`);
-      } else if (err.code) {
-        throw new GeneralPostgresError(`Db error with code: ${err.code}`);
+      if (err.code) {
+        throw new GeneralPostgresError(err);
       } else {
         throw err;
       }
     }
   }
 
-  async removeById(id: string): Promise<number> {
+  async removeById(id: string): Promise<void> {
     const { affected } = await getRepository(User).delete({ id });
-    return affected;
+    if(affected > 0) {
+      return;
+    } else {
+      throw new NotFoundError(`Cannot delete user with id: ${id}, because it does not exist in db`);
+    }
   }
 }

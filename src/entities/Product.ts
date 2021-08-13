@@ -1,11 +1,18 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  CreateDateColumn,
+  UpdateDateColumn, RelationId
+} from 'typeorm';
 import { Order } from './Order';
 import {Category} from './Category';
 
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
-  //@Generated('uuid')
   id: string;
 
   @Column({ length: 255 })
@@ -17,8 +24,8 @@ export class Product {
   @Column({ type: 'real' })
   price: string;
 
-  @ManyToMany(() => Order, (order) => order.products)
-  orders: Order;
+  @ManyToMany(() => Order, (order) => order.products, {nullable:true})
+  orders: Order[];
 
   @ManyToOne(() => Category, (category) => category.products, { nullable: false })
   category: Category;
@@ -27,9 +34,9 @@ export class Product {
   @Column()
   category_id: string
 
-  @Column({ type: 'timestamptz' })
-  createdAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ type: 'timestamptz' })
-  updatedAt: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

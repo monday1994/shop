@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn, CreateDateColumn} from 'typeorm';
 import {Order} from './Order';
 
 @Entity()
@@ -21,9 +21,9 @@ export class User {
   @OneToMany(() => Order, order => order.user)
   orders: Order[];
 
-  @Column({ type: 'timestamptz' })
-  createdAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ type: 'timestamptz' })
-  updatedAt: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

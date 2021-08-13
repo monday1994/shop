@@ -31,6 +31,7 @@ export default class UsersController {
       firstName: firstName.toLowerCase(),
       lastName: lastName.toLowerCase(),
       email: email.toLowerCase(),
+      //todo add crypto hash salt
       password,
     };
 

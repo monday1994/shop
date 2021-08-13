@@ -1,4 +1,3 @@
-
 export const enum HttpStatusCode {
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
@@ -63,10 +62,22 @@ export class ConflictError extends APIError {
   }
 }
 
+export interface PostgresErrorInterface {
+  code: string,
+  detail: string
+}
+
 //general db error
+// https://www.postgresql.org/docs/9.2/errcodes-appendix.html
 export class GeneralPostgresError extends APIError {
-  constructor(description: string) {
-    super('INTERNAL', HttpStatusCode.INTERNAL_SERVER_ERROR, description);
+  constructor(err: PostgresErrorInterface) {
+    if(err.code === '23503') {
+      throw new NotFoundError(err.detail);
+    } else if (err.code === '23505') {
+      throw new ConflictError(err.detail);
+    } else {
+      super('UNHANDLED_POSTGRES_ERROR');
+    }
   }
 }
 
