@@ -15,6 +15,10 @@ export default class UsersService {
     return this.usersRepository.findById(id);
   }
 
+  getByEmail(email: string): Promise<User> {
+    return this.usersRepository.findByEmail(email);
+  }
+
   createUser(user: UserDTO): Promise<User> {
     return this.usersRepository.create(user);
   }

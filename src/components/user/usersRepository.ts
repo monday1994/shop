@@ -14,6 +14,10 @@ export default class UsersRepository {
     return getRepository(User).findOne(id);
   }
 
+  findByEmail(email: string): Promise<User> {
+    return getRepository(User).findOne({email});
+  }
+
   async create(user: UserDTO): Promise<User> {
     const usersRepository = getRepository(User);
     const { firstName, lastName, email, password } = user;

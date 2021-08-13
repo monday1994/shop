@@ -28,7 +28,13 @@ const idRule = param('id')
   .isUUID(4)
   .withMessage('id have to be uuid 4th version');
 
-export const createUserValidationRules = () => [
+export const loginValidationRules = () => [
+  emailRule,
+  passwordRule
+]
+
+
+export const registerUserValidationRules = () => [
   // firstName must be an email
   firstNameRule,
   lastNameRule,

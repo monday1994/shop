@@ -25,23 +25,6 @@ export default class UsersController {
     res.json({ data: user });
   };
 
-  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { firstName, lastName, email, password } = req.body;
-    const newUser = {
-      firstName: firstName.toLowerCase(),
-      lastName: lastName.toLowerCase(),
-      email: email.toLowerCase(),
-      //todo add crypto hash salt
-      password,
-    };
-
-    const createdUser = await this.usersService.createUser(newUser);
-    res.status(201);
-    res.json({
-      data: createdUser,
-    });
-  };
-
   update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
     const { firstName, lastName, email } = req.body;
