@@ -71,6 +71,25 @@ export default class UsersRepository {
     }
   }
 
+  setRefreshToken = async (id: string, refreshToken: string): Promise<void> => {
+    const usersRepository = getRepository(User);
+    try {
+      const { affected } = await usersRepository.update({ id }, { refreshToken });
+
+      if (affected > 0) {
+        return;
+      }
+
+      throw new NotFoundError(`User with id: ${id} does not exist in db`);
+    } catch (err) {
+      if (err.code) {
+        throw new GeneralPostgresError(err);
+      } else {
+        throw err;
+      }
+    }
+  }
+
   async removeById(id: string): Promise<void> {
     const { affected } = await getRepository(User).delete({ id });
     if(affected > 0) {

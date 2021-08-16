@@ -3,10 +3,15 @@ import { mountRoutes } from '../providers/routes';
 import { genericExceptionHandler } from './exceptions/exceptionsHandler';
 import {initDbConnection} from '../providers/db';
 import dotenv from 'dotenv';
+import passport from 'passport';
+import {applyPassportStrategy} from '../providers/passport';
 
 dotenv.config();
 
 const app = express();
+
+applyPassportStrategy(passport);
+app.use(passport.initialize());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

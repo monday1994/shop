@@ -27,6 +27,10 @@ export default class UsersService {
     return this.usersRepository.update(user);
   }
 
+  updateRefreshToken(id: string, refreshToken: string): Promise<void> {
+    return this.usersRepository.setRefreshToken(id, refreshToken);
+  }
+
   deleteById(id: string): Promise<void> {
     return this.usersRepository.removeById(id);
   }

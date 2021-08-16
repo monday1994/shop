@@ -1,12 +1,12 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn, CreateDateColumn} from 'typeorm';
-import {Order} from './Order';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Order } from './Order';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 255})
+  @Column({ length: 255 })
   firstName: string;
 
   @Column({ length: 255 })
@@ -18,7 +18,10 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
-  @OneToMany(() => Order, order => order.user)
+  @Column({ nullable: true })
+  refreshToken?: string;
+
+  @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
 
   @CreateDateColumn()

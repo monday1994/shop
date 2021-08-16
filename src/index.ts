@@ -5,7 +5,7 @@ import app from './app/app';
 import {logger} from './middlewares/logger';
 
 // Get port from environment and store in Express.
-const port = process.env.PORT || config.port;
+const port = process.env.PORT || config.server.port;
 // Create HTTP server.
 app.init();
 http.createServer(app).listen(port, () => {
