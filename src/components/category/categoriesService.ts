@@ -1,6 +1,5 @@
 import CategoriesRepository from './categoriesRepository';
 import {CategoryDTO} from './categoryDTO';
-import {NotFoundError} from '../../app/exceptions/error';
 import {Category} from '../../entities/Category';
 
 export default class CategoriesService {

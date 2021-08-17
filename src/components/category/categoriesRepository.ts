@@ -1,26 +1,27 @@
-import { getRepository } from 'typeorm';
+import {Repository} from 'typeorm';
 import { Category } from '../../entities/Category';
 import { CategoryDTO } from './categoryDTO';
 import { GeneralPostgresError, NotFoundError } from '../../app/exceptions/error';
 
 export default class CategoriesRepository {
+  constructor(private repository: Repository<Category>) {}
+
   async findAll(): Promise<Category[]> {
-    return getRepository(Category).find();
+    return this.repository.find();
   }
 
   async findById(id: string): Promise<Category> {
-    return getRepository(Category).findOne(id);
+    return this.repository.findOne(id);
   }
 
   async create(category: CategoryDTO): Promise<Category> {
-    const repository = getRepository(Category);
     const { name } = category;
 
     const newCategory = new Category();
     newCategory.name = name;
 
     try {
-      const createdCategory = await repository.save(newCategory);
+      const createdCategory = await this.repository.save(newCategory);
 
       return createdCategory;
     } catch (err) {
@@ -33,8 +34,6 @@ export default class CategoriesRepository {
   }
 
   async update(category: CategoryDTO): Promise<Category> {
-    const productsRepository = getRepository(Category);
-
     const { id, name } = category;
 
     const categoryToUpdate = new Category();
@@ -42,7 +41,7 @@ export default class CategoriesRepository {
     categoryToUpdate.name = name;
 
     try {
-      const { affected } = await productsRepository.update({ id }, categoryToUpdate);
+      const { affected } = await this.repository.update({ id }, categoryToUpdate);
 
       if (affected > 0) {
         return categoryToUpdate;
@@ -60,7 +59,7 @@ export default class CategoriesRepository {
 
   async removeById(id: string): Promise<void> {
     try {
-      const { affected } = await getRepository(Category).delete({ id });
+      const { affected } = await this.repository.delete({ id });
 
       if (affected > 0) {
         return;

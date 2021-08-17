@@ -11,18 +11,16 @@ const healthCheckHandler = (req: Request, res: Response) => {
     res.json({status: 200, message: 'Health check - status ok!'})
 };
 
-export const mountRoutes = (app: Express, prefix: string): Express => {
+export const mountRoutes = (app: Express, prefix: string): void => {
     //health check
     app.get(`${prefix}/`, healthCheckHandler);
     //other routes
-    app.use(`${prefix}/auth`, authRouter);
+    app.use(`${prefix}/auth`, authRouter());
 
     app.use(passport.authenticate('jwt-token', {session: false}));
-    app.use(`${prefix}/users`, userRouter);
-    app.use(`${prefix}/products`, productsRouter);
-    app.use(`${prefix}/categories`, categoriesRouter)
-    app.use(`${prefix}/orders`, ordersRouter)
-
-    return app;
+    app.use(`${prefix}/users`, userRouter());
+    app.use(`${prefix}/products`, productsRouter());
+    app.use(`${prefix}/categories`, categoriesRouter())
+    app.use(`${prefix}/orders`, ordersRouter())
 };
 

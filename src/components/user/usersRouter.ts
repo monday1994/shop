@@ -6,14 +6,18 @@ import UsersService from './usersService';
 import UsersRepository from './usersRepository';
 import { validate } from '../../middlewares/validator';
 import { updateUserValidationRules, getByIdValidationRule } from './userValidator';
+import { getRepository } from 'typeorm';
+import { User } from '../../entities/User';
 
-const router = Router();
+export default () => {
+  const router = Router();
 
-const usersController = new UsersController(new UsersService(new UsersRepository()));
+  const usersController = new UsersController(new UsersService(new UsersRepository(getRepository(User))));
 
-router.get('', usersController.getAll);
-router.get('/:id', getByIdValidationRule(), validate, usersController.getById);
-router.put('/:id', updateUserValidationRules(), validate, usersController.update);
-router.delete('/:id', getByIdValidationRule(), validate, usersController.delete);
+  router.get('', usersController.getAll);
+  router.get('/:id', getByIdValidationRule(), validate, usersController.getById);
+  router.put('/:id', updateUserValidationRules(), validate, usersController.update);
+  router.delete('/:id', getByIdValidationRule(), validate, usersController.delete);
 
-export default router;
+  return router;
+};

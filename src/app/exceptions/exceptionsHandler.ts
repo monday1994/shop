@@ -6,17 +6,20 @@ import {logger} from '../../middlewares/logger';
 
 export interface ErrorMessage {
     message?: string,
-    httpCode?: number
+    httpCode?: number,
+    status?: number
 }
 
 // next callback have to be here, otherwise handler won't properly return response
 export const genericExceptionHandler = (err: ErrorMessage, req: Request, res: Response, next: NextFunction) : void => {
     logger.error('Error', err);
-
     if(err?.message && err?.httpCode) {
         const {httpCode, message} = err;
         res.status(httpCode);
         res.json({status: httpCode, message});
+    } else if (err?.status) {
+        res.status(err.status);
+        res.json({message: err});
     } else {
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR);
         res.json({

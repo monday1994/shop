@@ -1,15 +1,21 @@
-import { getManager, getRepository } from 'typeorm';
+import { EntityManager, getManager, Repository } from 'typeorm';
 import { Order } from '../../entities/Order';
 import { OrderDTO } from './orderDTO';
 import { GeneralPostgresError, NotFoundError } from '../../app/exceptions/error';
 
 export default class OrdersRepository {
+  constructor(private repository: Repository<Order>, private manager: EntityManager) {}
+
   async findAll(): Promise<Order[]> {
-    return getRepository(Order).createQueryBuilder('order').leftJoinAndSelect('order.products', 'products').getMany();
+    return this.repository.createQueryBuilder('order').leftJoinAndSelect('order.products', 'products').getMany();
   }
 
   async findById(id: string): Promise<Order> {
-    return getRepository(Order).createQueryBuilder('order').leftJoinAndSelect('order.products', 'products').where('order.id = :id', {id}).getOne();
+    return this.repository
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.products', 'products')
+      .where('order.id = :id', { id })
+      .getOne();
   }
 
   async create(order: OrderDTO): Promise<Order> {
@@ -54,13 +60,17 @@ export default class OrdersRepository {
     orderToUpdate.user_id = userId;
     try {
       // many to many relation creation using transaction
-      await getManager().transaction(async (transactionalEntityManager) => {
-        const {affected} = await transactionalEntityManager.update(Order, { id }, orderToUpdate);
-        if(affected > 0) {
+      await this.manager.transaction(async (transactionalEntityManager) => {
+        const { affected } = await transactionalEntityManager.update(Order, { id }, orderToUpdate);
+        if (affected > 0) {
           const orderMeta = await this.findById(orderToUpdate.id);
 
-          const oldProductsIds = orderMeta.products.map(({id}) => id);
-          await transactionalEntityManager.createQueryBuilder().relation(Order, 'products').of(id).addAndRemove(productsIds, oldProductsIds);
+          const oldProductsIds = orderMeta.products.map(({ id }) => id);
+          await transactionalEntityManager
+            .createQueryBuilder()
+            .relation(Order, 'products')
+            .of(id)
+            .addAndRemove(productsIds, oldProductsIds);
         } else {
           throw new NotFoundError(`Order with id: ${id} does not exist in db`);
         }
@@ -78,7 +88,7 @@ export default class OrdersRepository {
 
   async removeById(id: string): Promise<void> {
     try {
-      const { affected } = await getRepository(Order).delete({ id });
+      const { affected } = await this.repository.delete({ id });
 
       if (affected > 0) {
         return;

@@ -1,22 +1,22 @@
-import { getRepository } from 'typeorm';
+import {Repository} from 'typeorm';
 import { Product } from '../../entities/Product';
 import { ProductDTO } from './productDTO';
 import { GeneralPostgresError, NotFoundError } from '../../app/exceptions/error';
 
 export default class ProductsRepository {
+  constructor(private repository: Repository<Product>) {}
+
   async findAll(): Promise<Product[]> {
-    return getRepository(Product)
-      .createQueryBuilder('product')
+    return this.repository.createQueryBuilder('product')
       .leftJoinAndSelect('product.category', 'category')
       .getMany();
   }
 
   async findById(id: string): Promise<Product> {
-    return getRepository(Product).findOne(id);
+    return this.repository.findOne(id);
   }
 
   async create(product: ProductDTO): Promise<Product> {
-    const productsRepository = getRepository(Product);
     const { name, description, price, categoryId } = product;
 
     const newProduct = new Product();
@@ -26,7 +26,7 @@ export default class ProductsRepository {
     newProduct.category_id = categoryId;
 
     try {
-      const createdProduct = await productsRepository.save(newProduct);
+      const createdProduct = await this.repository.save(newProduct);
       return createdProduct;
     } catch (err) {
       if (err.code) {
@@ -38,8 +38,6 @@ export default class ProductsRepository {
   }
 
   async update(product: ProductDTO): Promise<Product> {
-    const productsRepository = getRepository(Product);
-
     const { id, name, description, price, categoryId } = product;
 
     const productToUpdate = new Product();
@@ -51,7 +49,7 @@ export default class ProductsRepository {
     productToUpdate.category_id = categoryId;
 
     try {
-      const { affected } = await productsRepository.update({ id }, productToUpdate);
+      const { affected } = await this.repository.update({ id }, productToUpdate);
 
       if (affected > 0) {
         return productToUpdate;
@@ -69,7 +67,7 @@ export default class ProductsRepository {
 
   async removeById(id: string): Promise<void> {
     try {
-      const { affected } = await getRepository(Product).delete({ id });
+      const { affected } = await this.repository.delete({ id });
 
       if (affected > 0) {
         return;

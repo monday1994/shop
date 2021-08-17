@@ -1,25 +1,26 @@
 // user database access layer
 
-import { getRepository } from 'typeorm';
+import {Repository} from 'typeorm';
 import { User } from '../../entities/User';
 import { UserDTO } from './userDTO';
 import {ConflictError, GeneralPostgresError, NotFoundError} from '../../app/exceptions/error';
 
 export default class UsersRepository {
+  constructor(private repository: Repository<User>) {}
+
   findAll(): Promise<User[]> {
-    return getRepository(User).find();
+    return this.repository.find();
   }
 
   findById(id: string): Promise<User> {
-    return getRepository(User).findOne(id);
+    return this.repository.findOne(id);
   }
 
   findByEmail(email: string): Promise<User> {
-    return getRepository(User).findOne({email});
+    return this.repository.findOne({email});
   }
 
   async create(user: UserDTO): Promise<User> {
-    const usersRepository = getRepository(User);
     const { firstName, lastName, email, password } = user;
 
     const newUser = new User();
@@ -29,7 +30,7 @@ export default class UsersRepository {
     newUser.password = password;
 
     try {
-      const createdUser = await usersRepository.save(newUser);
+      const createdUser = await this.repository.save(newUser);
       return createdUser;
     } catch (err) {
       if (err.code === '23505') {
@@ -43,8 +44,6 @@ export default class UsersRepository {
   }
 
   async update(user: UserDTO): Promise<User | number> {
-    const usersRepository = getRepository(User);
-
     const { id, firstName, lastName, email } = user;
 
     const userToUpdate = new User();
@@ -55,7 +54,7 @@ export default class UsersRepository {
     userToUpdate.email = email;
 
     try {
-      const {affected} = await usersRepository.update({ id }, userToUpdate);
+      const {affected} = await this.repository.update({ id }, userToUpdate);
 
       if (affected > 0) {
         return userToUpdate;
@@ -72,9 +71,8 @@ export default class UsersRepository {
   }
 
   setRefreshToken = async (id: string, refreshToken: string): Promise<void> => {
-    const usersRepository = getRepository(User);
     try {
-      const { affected } = await usersRepository.update({ id }, { refreshToken });
+      const { affected } = await this.repository.update({ id }, { refreshToken });
 
       if (affected > 0) {
         return;
@@ -91,7 +89,7 @@ export default class UsersRepository {
   }
 
   async removeById(id: string): Promise<void> {
-    const { affected } = await getRepository(User).delete({ id });
+    const { affected } = await this.repository.delete({ id });
     if(affected > 0) {
       return;
     } else {
