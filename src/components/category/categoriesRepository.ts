@@ -1,10 +1,20 @@
-import {Repository} from 'typeorm';
+import {DeleteResult, Repository, UpdateResult} from 'typeorm';
 import { Category } from '../../entities/Category';
 import { CategoryDTO } from './categoryDTO';
 import { GeneralPostgresError, NotFoundError } from '../../app/exceptions/error';
 
+//temp proposal for unit testing
+interface CategoryRepository {
+  findOne: (id: string) => Promise<Category>,
+  find: () => Promise<Category[]>,
+  save: (category: Category) => Promise<Category>,
+  update: (cat: {id: string}, category: Category) => Promise<UpdateResult>,
+  delete: (category: {id: string}) => Promise<DeleteResult>
+}
+
 export default class CategoriesRepository {
-  constructor(private repository: Repository<Category>) {}
+  // repository: Repository<Category> -> temp commented should be in constructor
+  constructor(private repository: CategoryRepository) {}
 
   async findAll(): Promise<Category[]> {
     return this.repository.find();

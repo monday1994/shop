@@ -15,6 +15,7 @@ services:
       - ./package.json:/home/node/package.json
       - ./tsconfig.json:/home/node/tsconfig.json:ro
       - ./.env:/home/node/.env:ro
+      - ./nodemon.json:/home/node/nodemon.json:ro
     environment:
       DATABASE_URL: postgres://postgres:secret@postgres:5432/shop-db
       NODE_ENV: development
